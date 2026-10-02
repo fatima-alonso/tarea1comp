@@ -1,7 +1,8 @@
 class HashTable {
-    contructor(size) {
-        this.size = size;
+    constructor(size) {
+        this.capacity = size;
         this.table = new Array(size);
+        this.counter = 0;
     }
 
     hash(key) {
@@ -9,7 +10,7 @@ class HashTable {
         for (let i = 0; i < key.length; i++) {
             hashValue += key.charCodeAt(i);
         }
-        return hashValue % this.size;
+        return hashValue % this.capacity;
     }
 
     set(key, value) {
@@ -18,6 +19,7 @@ class HashTable {
             this.table[index] = [];
         }
         this.table[index].push([key, value]);
+        this.counter++;
     }
 
     get(key) {
@@ -41,17 +43,24 @@ class HashTable {
         for (let i = 0; i < this.table[index].length; i++) {
             if (this.table[index][i][0] === key) {
                 this.table[index].splice(i, 1);
+                this.counter--;
                 return true;
             }
         }
         return false;
     }
 
+    get size() {
+        return this.counter;
+    }
+
     print() {
-        for (let i = 0; i < this.size; i++) {
+        for (let i = 0; i < this.capacity; i++) {
             if (this.table[i]) {
                 console.log(`${i}: ${this.table[i].map(([k, v]) => `${k}: ${v}`).join(", ")}`);
             }
         }
     }
 }
+
+module.exports = HashTable;
